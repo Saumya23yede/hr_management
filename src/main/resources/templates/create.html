@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create User</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
+      <form
+        th:action="@{/users/create}"
+        th:object="${userForm}"
+        method="post"
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+        <h1 class="text-2xl font-bold text-center text-gray-700">
+          Create User
+        </h1>
+
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700"
+            >Username:</label
+          >
+          <input
+            type="text"
+            id="username"
+            th:field="*{username}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Name:</label
+          >
+          <input
+            type="text"
+            id="name"
+            th:field="*{name}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email:</label
+          >
+          <input
+            type="email"
+            id="email"
+            th:field="*{email}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Password:</label
+          >
+          <input
+            type="password"
+            id="password"
+            th:field="*{password}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Contact Number -->
+        <div>
+          <label for="contactNo" class="block text-sm font-medium text-gray-700"
+            >Contact Number:</label
+          >
+          <input
+            type="text"
+            id="contactNo"
+            th:field="*{contactNo}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Date of Birth -->
+        <div>
+          <label for="dob" class="block text-sm font-medium text-gray-700"
+            >Date of Birth:</label
+          >
+          <input
+            type="date"
+            id="dob"
+            th:field="*{dob}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700"
+            >Address:</label
+          >
+          <input
+            type="text"
+            id="address"
+            th:field="*{address}"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Salary -->
+        <div>
+          <label for="salary" class="block text-sm font-medium text-gray-700"
+            >Salary:</label
+          >
+          <input
+            type="number"
+            id="salary"
+            th:field="*{salary}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Aadhar ID -->
+        <div>
+          <label for="aadharId" class="block text-sm font-medium text-gray-700"
+            >Aadhar ID:</label
+          >
+          <input
+            type="number"
+            id="aadharId"
+            th:field="*{aadharId}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+        <!-- Job Role -->
+        <div>
+          <label for="jobRole" class="block text-sm font-medium text-gray-700"
+            >Job Role:</label
+          >
+          <select
+            id="jobRole"
+            th:field="*{jobRole}"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="" disabled selected>Select Job Role</option>
+            <option value="HR">HR</option>
+
+            <option value="EMPLOYEE">EMPLOYEE</option>
+          </select>
+        </div>
+
+        <!-- Resume Upload -->
+        <div>
+          <label for="resume" class="block text-sm font-medium text-gray-700"
+            >Resume:</label
+          >
+          <input
+            type="file"
+            id="resume"
+            th:field="*{resume}"
+            class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Create User
+          </button>
+        </div>
+
+        <div class="text-center">
+          <a href="/users" class="text-indigo-600 hover:underline"
+            >Back to User List</a
+          >
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

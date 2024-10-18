@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <title>Pending Leave Requests</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Pending Leave Requests</h2>
+      <!-- Back Button -->
+      <button onclick="window.history.back()" class="btn btn-secondary">
+        Back
+      </button>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through the pending leave requests and display them -->
+          <tr th:each="request : ${pendingRequests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.user.username}"></td>
+            <td th:text="${request.leaveType}"></td>
+            <td th:text="${request.startDate}"></td>
+            <td th:text="${request.endDate}"></td>
+            <td th:text="${request.status}"></td>
+            <td>
+              <!-- Accept Button -->
+              <form
+                action="/api/leave/accept"
+                method="post"
+                style="display: inline"
+              >
+                <input
+                  type="hidden"
+                  name="leaveRequestId"
+                  th:value="${request.id}"
+                />
+                <button type="submit" class="btn btn-success btn-sm">
+                  Accept
+                </button>
+              </form>
+
+              <!-- Reject Button -->
+              <form
+                action="/api/leave/reject"
+                method="post"
+                style="display: inline"
+              >
+                <input
+                  type="hidden"
+                  name="leaveRequestId"
+                  th:value="${request.id}"
+                />
+                <button type="submit" class="btn btn-danger btn-sm">
+                  Reject
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

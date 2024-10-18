@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payroll Slip</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      /* CSS for Styling the Payroll Slip */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        margin: 0;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .payroll-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .payroll-details {
+        margin: 20px 0;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        margin-top: 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .btn:hover {
+        background-color: #45a049;
+      }
+
+      .btn-secondary {
+        background-color: #555;
+      }
+
+      .btn-secondary:hover {
+        background-color: #444;
+      }
+
+      .btn-container {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payroll-container" id="payroll">
+      <h1>
+        Payroll Slip for
+        <span id="employeeName" th:text="${employeeName}">Employee Name</span>
+      </h1>
+
+      <div class="payroll-details">
+        <p>
+          Basic Salary:
+          <span id="basicSalary" th:text="${payroll.basicSalary}"
+            >Basic Salary</span
+          >
+        </p>
+        <p>
+          Overtime Pay:
+          <span id="overtimePay" th:text="${payroll.overtimePay}"
+            >Overtime Pay</span
+          >
+        </p>
+        <p>
+          Total Earnings:
+          <span id="totalEarnings" th:text="${payroll.totalEarnings}"
+            >Total Earnings</span
+          >
+        </p>
+        <p>
+          Tax Deduction:
+          <span id="taxDeduction" th:text="${payroll.taxDeduction}"
+            >Tax Deduction</span
+          >
+        </p>
+        <p>
+          Other Deductions:
+          <span id="otherDeductions" th:text="${payroll.otherDeductions}"
+            >Other Deductions</span
+          >
+        </p>
+        <p>
+          Net Pay: <span id="netPay" th:text="${payroll.netPay}">Net Pay</span>
+        </p>
+        <p>
+          Payroll Date:
+          <span id="payrollDate" th:text="${payroll.payrollDate}"
+            >Payroll Date</span
+          >
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-container">
+        <button onclick="window.history.back()" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button onclick="generatePDF()" class="btn">
+          <i class="fas fa-file-pdf"></i> Generate PDF
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Manually adding content to the PDF
+        doc.setFontSize(18);
+        doc.text("Payroll Slip", 105, 20, null, null, "center");
+
+        // Retrieve payroll details from the DOM
+        const employeeName = document.getElementById("employeeName").innerText;
+        const basicSalary = document.getElementById("basicSalary").innerText;
+        const overtimePay = document.getElementById("overtimePay").innerText;
+        const totalEarnings =
+          document.getElementById("totalEarnings").innerText;
+        const taxDeduction = document.getElementById("taxDeduction").innerText;
+        const otherDeductions =
+          document.getElementById("otherDeductions").innerText;
+        const netPay = document.getElementById("netPay").innerText;
+        const payrollDate = document.getElementById("payrollDate").innerText;
+
+        // Adding the text to PDF
+        doc.setFontSize(12);
+        doc.text(`Employee Name: ${employeeName}`, 10, 30);
+        doc.text(`Basic Salary: ${basicSalary}`, 10, 40);
+        doc.text(`Overtime Pay: ${overtimePay}`, 10, 50);
+        doc.text(`Total Earnings: ${totalEarnings}`, 10, 60);
+        doc.text(`Tax Deduction: ${taxDeduction}`, 10, 70);
+        doc.text(`Other Deductions: ${otherDeductions}`, 10, 80);
+        doc.text(`Net Pay: ${netPay}`, 10, 90);
+        doc.text(`Payroll Date: ${payrollDate}`, 10, 100);
+
+        // Save the generated PDF
+        doc.save(`${employeeName}_Payroll_Slip.pdf`);
+      }
+    </script>
+  </body>
+</html>

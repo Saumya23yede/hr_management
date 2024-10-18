@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto p-3">
+      <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-3">
+        <h1 class="text-3xl font-bold mb-4 text-center text-indigo-600">
+          User Details
+        </h1>
+        <div class="space-y-4">
+          <p>
+            <strong class="text-lg text-gray-700">User ID:</strong>
+            <span th:text="${user.id}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Username:</strong>
+            <span th:text="${user.username}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Name:</strong>
+            <span th:text="${user.name}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Email:</strong>
+            <span th:text="${user.email}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Contact Number:</strong>
+            <span th:text="${user.contactNo}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Date of Birth:</strong>
+            <span th:text="${user.dob}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Address:</strong>
+            <span th:text="${user.address}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Salary:</strong>
+            <span th:text="${user.salary}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Aadhar ID:</strong>
+            <span th:text="${user.aadharId}" class="text-gray-900"></span>
+          </p>
+          <p>
+            <strong class="text-lg text-gray-700">Role:</strong>
+            <span th:text="${user.role}" class="text-gray-900"></span>
+          </p>
+          <div>
+            <strong class="text-lg text-gray-700">Resume:</strong>
+            <span class="text-gray-900" th:if="${user.resume != null}"
+              >Uploaded</span
+            >
+            <span class="text-gray-900" th:unless="${user.resume != null}"
+              >Not Uploaded</span
+            >
+          </div>
+        </div>
+        <div class="mt-6 flex justify-between items-center">
+          <a
+            th:href="@{/users/{id}/edit(id=${user.id})}"
+            class="text-white bg-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
+          >
+            Edit
+          </a>
+          <form
+            th:action="@{/users/{id}/delete(id=${user.id})}"
+            method="post"
+            style="display: inline"
+          >
+            <button
+              type="submit"
+              class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+        <div class="mt-3 text-center">
+          <a href="/users" class="text-indigo-600 hover:underline">
+            Back to User List
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

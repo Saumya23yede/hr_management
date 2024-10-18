@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-indigo-600 p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="text-white text-lg font-bold">HR Management</div>
+        <div>
+          <a
+            th:href="@{/users/create}"
+            class="inline-block bg-indigo-700 text-white py-2 px-4 rounded-md hover:bg-indigo-800 mx-2"
+            >Create New User</a
+          >
+          <a
+            th:href="@{/logout}"
+            class="inline-block bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 mx-2"
+            >Logout</a
+          >
+          <a
+            th:href="@{/api/leave/pending}"
+            class="inline-block bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 mx-2"
+            >Pending Leave</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mx-auto py-8">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      >
+        <div
+          th:each="user : ${users.content}"
+          class="bg-white border border-gray-300 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          <h2 class="text-xl font-bold mb-2" th:text="${user.name}">
+            John Doe
+          </h2>
+          <p class="text-gray-600 mb-1">
+            <strong>User ID:</strong> <span th:text="${user.id}">12345</span>
+          </p>
+          <p class="text-gray-600 mb-1">
+            <strong>Username:</strong>
+            <span th:text="${user.username}">johndoe</span>
+          </p>
+          <p class="text-gray-600 mb-1">
+            <strong>Email:</strong>
+            <span th:text="${user.email}">user@example.com</span>
+          </p>
+          <p class="text-gray-600 mb-1">
+            <strong>Contact:</strong>
+            <span th:text="${user.contactNo}">9876543210</span>
+          </p>
+          <p class="text-gray-600 mb-1">
+            <strong>Date of Birth:</strong>
+            <span th:text="${user.dob}">01-01-1990</span>
+          </p>
+          <p class="text-gray-600 mb-1">
+            <strong>Salary:</strong> <span th:text="${user.salary}">50000</span>
+          </p>
+          <p class="text-gray-600 mb-4">
+            <strong>Role:</strong>
+            <span th:if="${user.role != null}" th:text="${user.role.name()}"
+              >User Role</span
+            >
+            <span th:if="${user.role == null}">No Role Assigned</span>
+          </p>
+
+          <!-- Actions: View, Edit, Delete -->
+          <div class="space-y-2">
+            <a
+              th:href="@{/users/{userId}(userId=${user.id})}"
+              class="block bg-blue-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-600"
+              >View</a
+            >
+            <a
+              th:href="@{/users/{userId}/edit(userId=${user.id})}"
+              class="block bg-green-500 text-white py-2 px-4 rounded-md text-center hover:bg-green-600"
+              >Edit</a
+            >
+            <a
+              th:href="@{/users/{userId}/payroll-slip(userId=${user.id})}"
+              class="block bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 rounded-md text-center hover:bg-gray-200"
+              >View Payroll Slip</a
+            >
+            <form
+              th:action="@{/users/{userId}/delete(userId=${user.id})}"
+              method="post"
+              style="display: inline"
+            >
+              <button
+                type="submit"
+                class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 mt-1"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="mt-5 flex justify-center">
+        <nav aria-label="Page navigation">
+          <ul class="inline-flex space-x-2 border-t border-gray-300 pt-4">
+            <!-- Previous button -->
+            <li th:if="${users.hasPrevious()}">
+              <a
+                th:href="@{/users(page=${users.number - 1})}"
+                class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                aria-label="Previous"
+                >Previous</a
+              >
+            </li>
+            <li th:unless="${users.hasPrevious()}">
+              <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-md"
+                >Previous</span
+              >
+            </li>
+
+            <!-- Page numbers -->
+            <li th:each="i : ${#numbers.sequence(0, users.totalPages - 1)}">
+              <a
+                th:href="@{/users(page=${i})}"
+                th:text="${i + 1}"
+                th:classappend="'bg-gray-200'"
+                class="px-4 py-2 rounded-md hover:bg-gray-300"
+              ></a>
+            </li>
+
+            <!-- Next button -->
+            <li th:if="${users.hasNext()}">
+              <a
+                th:href="@{/users(page=${users.number + 1})}"
+                class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                aria-label="Next"
+                >Next</a
+              >
+            </li>
+            <li th:unless="${users.hasNext()}">
+              <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-md"
+                >Next</span
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </body>
+</html>

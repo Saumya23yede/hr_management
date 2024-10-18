@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Certifications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto py-10 px-4">
+      <h1 class="text-3xl font-bold text-center mb-8">
+        Upload Certifications for Employee ID: <span th:text="${empId}"></span>
+      </h1>
+      <form
+        th:action="@{/employees/{empId}/certifications/upload(empId=${empId})}"
+        method="post"
+        enctype="multipart/form-data"
+        class="bg-white shadow-md rounded-lg p-6"
+      >
+        <div class="mb-4">
+          <label for="file" class="block text-lg font-medium mb-2"
+            >Upload CSV File:</label
+          >
+          <input
+            type="file"
+            id="file"
+            name="file"
+            required
+            class="border border-gray-300 rounded-md py-2 px-3 w-full"
+          />
+        </div>
+        <div class="flex justify-center">
+          <button
+            type="submit"
+            class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
+          >
+            Upload Certifications
+          </button>
+        </div>
+      </form>
+      <div class="text-center mt-6">
+        <a href="/employees" class="text-indigo-600 hover:underline"
+          >Back to Employee List</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

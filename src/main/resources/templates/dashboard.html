@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f4f4f4;
+      }
+
+      .navbar {
+        background-color: #007bff; /* Change to a blue color */
+      }
+
+      .navbar-brand,
+      .navbar-nav .nav-link {
+        color: #ffffff !important;
+      }
+
+      .navbar-nav .nav-link:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+      }
+
+      .main-content {
+        margin-top: 20px; /* Space for the navbar */
+        padding: 20px;
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        background-color: #ffffff; /* White background for content */
+      }
+
+      #message {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .role-badge {
+        margin-left: 15px; /* Space between links and badge */
+        background-color: #28a745; /* Green color for badge */
+        color: white; /* White text for the badge */
+        padding: 5px 10px; /* Padding for the badge */
+        border-radius: 5px; /* Rounded badge */
+        font-weight: bold; /* Bold text */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="#">Attendance Management</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/leave/request">Apply for Leave</a>
+            </li>
+            <!-- Conditionally render the HR Only Action button -->
+            <li class="nav-item" th:if="${role == 'HR'}">
+              <a class="nav-link" href="/users">HR Only Action</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-danger" href="/logout">Logout</a>
+            </li>
+          </ul>
+          <!-- Display role as a badge -->
+          <span class="role-badge" th:text="${'Role: ' + role}"></span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content container">
+      <h1 class="mb-4 text-center">Attendance Management</h1>
+
+      <div class="row mb-3">
+        <div class="col text-center">
+          <a class="btn btn-success" href="#" id="clockInButton">Clock In</a>
+          <a class="btn btn-danger" href="#" id="clockOutButton">Clock Out</a>
+        </div>
+      </div>
+
+      <h2>Apply for Leave</h2>
+      <form action="/api/leave/request" method="post">
+        <div class="form-group">
+          <label for="leaveType">Leave Type:</label>
+          <input type="text" name="leaveType" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="startDate">Start Date:</label>
+          <input type="date" name="startDate" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date:</label>
+          <input type="date" name="endDate" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Submit Leave Request
+        </button>
+      </form>
+      <div id="message" class="mt-3" th:text="${message}"></div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      // Get the current userId from session storage or another method as needed
+      const userId = sessionStorage.getItem("userId"); // Assume userId is stored in session storage after login
+
+      // Clock In Function
+      async function clockIn(latitude, longitude) {
+        try {
+          const response = await fetch(
+            `/api/attendance/clock-in?latitude=${latitude}&longitude=${longitude}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + sessionStorage.getItem("token"), // Include token if you're using JWT
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to clock in");
+          }
+
+          const attendance = await response.json();
+          document.getElementById(
+            "message"
+          ).innerText = `Clocked in successfully: ${attendance.clockInTime}`;
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+        }
+      }
+
+      // Clock Out Function
+      async function clockOut(latitude, longitude) {
+        try {
+          const response = await fetch(
+            `/api/attendance/clock-out?latitude=${latitude}&longitude=${longitude}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + sessionStorage.getItem("token"), // Include token if you're using JWT
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to clock out");
+          }
+
+          const attendance = await response.json();
+          document.getElementById(
+            "message"
+          ).innerText = `Clocked out successfully: ${attendance.clockOutTime}`;
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+        }
+      }
+
+      // Add Event Listeners
+      document.getElementById("clockInButton").addEventListener("click", () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              clockIn(latitude, longitude); // Call clockIn with the obtained coordinates
+            },
+            (error) => {
+              document.getElementById("message").innerText =
+                "Error getting location: " + error.message;
+            }
+          );
+        } else {
+          document.getElementById("message").innerText =
+            "Geolocation is not supported by this browser.";
+        }
+      });
+
+      document
+        .getElementById("clockOutButton")
+        .addEventListener("click", () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const { latitude, longitude } = position.coords;
+                clockOut(latitude, longitude); // Call clockOut with the obtained coordinates
+              },
+              (error) => {
+                document.getElementById("message").innerText =
+                  "Error getting location: " + error.message;
+              }
+            );
+          } else {
+            document.getElementById("message").innerText =
+              "Geolocation is not supported by this browser.";
+          }
+        });
+    </script>
+  </body>
+</html>
